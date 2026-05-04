@@ -3,7 +3,7 @@ import { HERO, STUDIO, ASSETS } from "../mock";
 import { Play, ArrowDownRight,ArrowRight } from "lucide-react";
 
 export default function Hero() {
-  const videoSrc = `https://www.youtube.com/embed/${HERO.videoId}?autoplay=1&mute=1&loop=1&playlist=${HERO.videoId}&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1`;
+  // const videoSrc = `https://www.youtube.com/embed/${HERO.videoId}?autoplay=1&mute=1&loop=1&playlist=${HERO.videoId}&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1`;
 
   return (
     <section id="top" className="relative min-h-[100vh] w-full overflow-hidden grain vignette">
@@ -11,16 +11,27 @@ export default function Hero() {
       <div className="absolute inset-0 -z-0">
         <div className="absolute inset-0 w-full h-full">
           <video
-          autoPlay
-          muted 
-          loop
-          playsInline
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-                     w-[177.77vh] h-[56.25vw] min-w-full min-h-full object-cover"
-        >
-          <source src="/video/KS_Clips.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+  autoPlay
+  muted 
+  loop
+  playsInline
+  // 'so_0' generates a high-quality poster from the first frame automatically
+  poster="https://res.cloudinary.com/ddptxvwrj/video/upload/so_0/v1777883965/KS_Clips_krfhrk.jpg"
+  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+             w-[177.77vh] h-[56.25vw] min-w-full min-h-full object-cover"
+>
+  {/* WebM is much lighter - Cloudinary converts this on the fly with 'f_webm' */}
+  <source 
+    src="https://res.cloudinary.com/ddptxvwrj/video/upload/f_webm,q_auto,vc_vp9/v1777883965/KS_Clips_krfhrk.webm" 
+    type="video/webm" 
+  />
+  {/* MP4 Fallback with auto-compression */}
+  <source 
+    src="https://res.cloudinary.com/ddptxvwrj/video/upload/q_auto,vc_h264/v1777883965/KS_Clips_krfhrk.mp4" 
+    type="video/mp4" 
+  />
+  Your browser does not support the video tag.
+</video>
         </div>
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black" />
