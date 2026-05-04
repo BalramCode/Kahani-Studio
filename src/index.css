@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@300;400;500;600;700;800&family=Rubik+Glitch&family=Anton&display=swap');
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* 2. Configure the v4 Theme Engine */
+@theme {
+  /* Map your custom colors to Tailwind utility classes (e.g., text-crimson) */
+  --color-obsidian: #050505;
+  --color-charcoal: #111111;
+  --color-charcoal-2: #1a1a1a;
+  --color-crimson: #D32F2F;
+  --color-crimson-deep: #8a1f1f;
+  --color-ember: #FFD700;
+  --color-ash: #a8a8a8;
+  --color-bone: #e7e5e0;
+
+  /* Map your custom fonts to utility classes (e.g., font-display) */
+  --font-display: "Bebas Neue", "Inter", sans-serif;
+  --font-jagged: "Bungee", "Bebas Neue", sans-serif;
+  --font-type: "Special Elite", "Inter", monospace;
+  --font-body: "Inter", sans-serif;
+
+  /* Map shadcn variables to utility names */
+  --color-border: var(--border-color);
+  --color-background: var(--bg-color);
+  --color-foreground: var(--fg-color);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Adds a subtle "reveal" effect to the images */
+img {
+  transition: filter 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html, body {
+  margin: 0;
+  background: #050505;
+  color: #f5f5f0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection { background: #F5B800; color: #0a0a0a; }
+
+.font-serif-display { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 900; letter-spacing: -0.02em; }
+.font-condensed { font-family: 'Anton', sans-serif; letter-spacing: 0.02em; }
+.font-glitch { font-family: 'Rubik Glitch', system-ui; letter-spacing: 0.04em; }
+
+/* --- FILM GRAIN --- */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0.22;
+  animation: grainShift 0.9s steps(3) infinite;
+  z-index: 5;
+}
+@keyframes grainShift {
+  0% { transform: translate(0,0) }
+  33% { transform: translate(-2%, 1%) }
+  66% { transform: translate(1%, -2%) }
+  100% { transform: translate(0,0) }
+}
+
+/* vignette */
+.vignette::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.75) 100%);
+  pointer-events: none; z-index: 4;
+}
+
+/* crimson divider */
+.hairline { height: 1px; background: linear-gradient(to right, transparent, #C9161E 20%, #F5B800 55%, #C9161E 80%, transparent); opacity: 0.55; }
+
+/* glitch text on hover reveal */
+.glitch-reveal { position: relative; display: inline-block; color: #fff; }
+.glitch-reveal::before, .glitch-reveal::after {
+  content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; overflow: hidden;
+}
+.glitch-reveal::before { color: #C9161E; transform: translate(-2px, 1px); clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); }
+.glitch-reveal::after  { color: #F5B800; transform: translate(2px, -1px); clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); }
+
+/* marquee */
+@keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+.marquee-track { animation: marquee 38s linear infinite; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #1f1f1f; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #C9161E; }
+
+/* button transitions (specific, not universal) */
+.btn-press { transition: background-color .25s ease, color .25s ease, border-color .25s ease, transform .15s ease, box-shadow .25s ease; }
+.btn-press:active { transform: translateY(1px); }
+
+/* subtle halo for yellow accents */
+.halo-yellow { text-shadow: 0 0 22px rgba(245,184,0,0.25); }
+.halo-crimson { text-shadow: 0 0 22px rgba(201,22,30,0.35); }
+
+@layer base {
+  :root {
+    --background: 0 0% 2%;
+    --foreground: 50 10% 95%;
+    --card: 0 0% 5%;
+    --card-foreground: 50 10% 95%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 50 10% 95%;
+    --primary: 44 100% 48%;
+    --primary-foreground: 0 0% 8%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 355 76% 48%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 18%;
+    --input: 0 0% 14%;
+    --ring: 44 100% 48%;
+    --radius: 0.25rem;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+}
