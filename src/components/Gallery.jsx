@@ -79,61 +79,62 @@ export default function Gallery() {
 
 function GalleryItem({ g, i, scrollYProgress }) {
   const src = ASSETS.posters[g.img];
+  
+  // Use a simple state to check if we are on mobile (less than 768px)
+  const [isMobile, setIsMobile] = React.useState(false);
 
-  // Dynamic Parallax logic with Spring physics for smoothness
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const rawY = useTransform(
     scrollYProgress,
     [0, 1],
-    i % 2 === 0 ? [40, -40] : [-30, 30]
+    i % 2 === 0 ? [30, -30] : [-20, 20]
   );
-  const smoothY = useSpring(rawY, { stiffness: 100, damping: 20 });
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: [0.215, 0.61, 0.355, 1] },
-    },
-  };
+  const smoothY = useSpring(rawY, { stiffness: 100, damping: 25 });
 
   return (
     <motion.figure
-      variants={itemVariants}
       style={{ y: smoothY }}
-      whileHover="hover"
-      className="group relative break-inside-avoid overflow-hidden bg-black cursor-pointer grain rounded-sm"
+      initial="initial"
+      // CONDITION: If mobile, trigger on scroll (InView). If desktop, trigger on Hover.
+      whileInView={isMobile ? "active" : "initial"}
+      whileHover={!isMobile ? "active" : undefined}
+      viewport={{ once: false, amount: 0.6 }} 
+      className="group relative break-inside-avoid overflow-hidden bg-[#0a0a0a] rounded-sm mb-5 cursor-pointer"
     >
-      {/* Image with sophisticated zoom */}
+      {/* 1. The Image */}
       <motion.img
         src={src}
         alt={g.title}
-        loading="lazy"
         variants={{
-          hover: { scale: 1.05, filter: "brightness(0.7)" },
+          initial: { scale: 1, filter: "brightness(1)", opacity: 1 },
+          active: { scale: 1.05, filter: "brightness(0.6)", opacity: 1 }
         }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full h-auto block"
       />
 
-      {/* Modern Gradient & Glass Overlay */}
+      {/* 2. Cinematic Gradient Overlay */}
       <motion.div 
         variants={{
-          hover: { opacity: 1 }
+          initial: { opacity: 0 },
+          active: { opacity: 1 }
         }}
-        initial={{ opacity: 0 }}
-        className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" 
-        style={{ backdropFilter: "blur(0px)" }}
+        className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" 
       />
 
-      {/* Hover typography: Glitch & Slide up */}
+      {/* 3. Typography */}
       <figcaption className="absolute inset-0 flex flex-col items-center justify-center px-6 pointer-events-none">
         <motion.span
           variants={{
-            hover: { opacity: 1, y: 0 },
+            initial: { opacity: 0, y: 15 },
+            active: { opacity: 1, y: 0 }
           }}
-          initial={{ opacity: 0, y: 10 }}
-          transition={{ delay: 0.1 }}
           className="text-[10px] tracking-[0.5em] text-[#F5B800] uppercase mb-3"
         >
           {g.film}
@@ -141,35 +142,22 @@ function GalleryItem({ g, i, scrollYProgress }) {
         
         <motion.span
           variants={{
-            hover: { opacity: 1, scale: 1 },
+            initial: { opacity: 0, scale: 0.9 },
+            active: { opacity: 1, scale: 1 }
           }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          className="font-glitch text-3xl md:text-5xl text-white text-center"
-          style={{ textShadow: "0 0 15px rgba(201, 22, 30, 0.6)" }}
+          className="font-glitch text-3xl md:text-5xl text-white text-center uppercase"
+          style={{ textShadow: "0 0 20px rgba(201, 22, 30, 0.6)" }}
         >
           {g.title}
         </motion.span>
       </figcaption>
 
-      {/* Corner UI Marker */}
-      <div className="absolute top-3 left-3 overflow-hidden">
-        <motion.span 
-          initial={{ x: -20, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 0.5 }}
-          className="block text-[10px] tracking-[0.35em] text-white uppercase"
-        >
+      {/* 4. Index Marker */}
+      <div className="absolute top-4 left-4 overflow-hidden">
+        <span className="block text-[9px] tracking-[0.35em] text-white/40 uppercase">
           — {String(i + 1).padStart(2, "0")}
-        </motion.span>
+        </span>
       </div>
-
-      {/* Interactive Border */}
-      <motion.div 
-        variants={{
-          hover: { opacity: 1 }
-        }}
-        initial={{ opacity: 0 }}
-        className="absolute inset-0 border border-white/10"
-      />
     </motion.figure>
   );
 }
