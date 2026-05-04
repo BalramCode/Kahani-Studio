@@ -113,7 +113,7 @@ function GalleryItem({ g, i, scrollYProgress }) {
         alt={g.title}
         variants={{
           initial: { scale: 1, filter: "brightness(1)", opacity: 1 },
-          active: { scale: 1.05, filter: "brightness(0.6)", opacity: 1 }
+          active: { scale: 1.05, filter: "brightness(0.8)", opacity: 1 }
         }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full h-auto block"
