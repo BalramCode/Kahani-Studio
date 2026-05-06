@@ -43,11 +43,10 @@ export default function Careers() {
             <button
               key={d}
               onClick={() => setFilter(d)}
-              className={`px-4 py-2 text-[10px] uppercase tracking-[0.28em] border transition-all ${
-                filter === d
+              className={`px-4 py-2 text-[10px] uppercase tracking-[0.28em] border transition-all ${filter === d
                   ? "bg-[#FFD700] text-black border-[#FFD700]"
                   : "text-white/65 border-white/10 hover:border-[#FFD700]/60 hover:text-[#FFD700]"
-              }`}
+                }`}
             >
               {d}
             </button>
@@ -55,36 +54,66 @@ export default function Careers() {
         </div>
 
         {/* Roles list */}
-        <div className="border-t border-white/5">
+        {/* Roles list */}
+        <div className="border-t border-white/10">
           <AnimatePresence mode="popLayout">
-            {filtered.map((c) => (
+            {filtered.map((c, index) => (
               <motion.button
                 key={c.id}
                 layout
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                // Staggered entrance animation
+                initial={{ opacity: 0, y: 20 }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  transition: { delay: index * 0.05 }
+                }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                whileHover={{ scale: 1.005, x: 10 }}
+                whileTap={{ scale: 0.99 }}
                 onClick={() => setActive(c)}
-                className="w-full text-left group border-b border-white/5 py-8 px-2 hover:bg-white/[0.02] transition-colors"
+                className="w-full text-left group relative border-b border-white/5 py-10 px-4 hover:bg-white/[0.03] transition-all duration-300 ease-out"
               >
-                <div className="grid grid-cols-12 gap-4 items-center">
+                {/* Animated accent border on the left */}
+                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#FFD700] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-center" />
+
+                <div className="grid grid-cols-12 gap-6 items-center">
+                  {/* Main Role Info */}
                   <div className="col-span-12 md:col-span-5">
-                    <div className="font-serif-display text-2xl md:text-4xl text-white group-hover:text-[#FFD700] transition-colors">
+                    <div className="font-serif-display text-3xl md:text-5xl text-white group-hover:text-[#FFD700] transition-colors duration-300 leading-none">
                       {c.role}
                     </div>
-                    <div className="text-[10px] uppercase tracking-[0.28em] text-white/40 mt-2">
+                    <div className="text-[11px] uppercase tracking-[0.3em] text-white/40 mt-3 group-hover:text-white/70 transition-colors">
                       {c.department}
                     </div>
                   </div>
-                  <div className="col-span-6 md:col-span-2 text-[10px] uppercase tracking-[0.24em] text-white/60">
+
+                  {/* Metadata - hidden/stacked on tiny screens, organized on md+ */}
+                  <div className="col-span-6 md:col-span-2 text-[10px] md:text-[11px] uppercase tracking-[0.24em] text-white/50 group-hover:text-white/80 transition-colors">
+                    <span className="block text-white/20 mb-1 md:hidden">Type</span>
                     {c.type}
                   </div>
-                  <div className="col-span-6 md:col-span-3 text-[10px] uppercase tracking-[0.24em] text-white/60">
+
+                  <div className="col-span-6 md:col-span-3 text-[10px] md:text-[11px] uppercase tracking-[0.24em] text-white/50 group-hover:text-white/80 transition-colors">
+                    <span className="block text-white/20 mb-1 md:hidden">Location</span>
                     {c.location}
                   </div>
-                  <div className="col-span-12 md:col-span-2 flex md:justify-end">
-                    <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-white/60 group-hover:text-[#D32F2F] transition-colors">
-                      Apply <ArrowRight size={14} />
+
+                  {/* Action Call */}
+                  <div className="col-span-12 md:col-span-2 flex md:justify-end mt-4 md:mt-0">
+                    <span className="inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-[#FFD700] transition-all duration-300">
+                      Apply
+                      <motion.span
+                        variants={{
+                          initial: { x: 0 },
+                          hover: { x: 5 }
+                        }}
+                        initial="initial"
+                        whileHover="hover"
+                        className="transition-transform group-hover:translate-x-2"
+                      >
+                        <ArrowRight size={18} strokeWidth={1.5} />
+                      </motion.span>
                     </span>
                   </div>
                 </div>
@@ -132,7 +161,7 @@ function ApplicationForm({ role, onDone }) {
     if (!file) return;
 
     // EmailJS Free limit is roughly 50KB for base64 strings
-    if (file.size > 100000) { 
+    if (file.size > 100000) {
       toast.error("File too large. Please use a URL instead.");
       return;
     }
