@@ -104,6 +104,8 @@ export const FILMS = [
     links: [
       { label: "Announcement", url: "https://youtu.be/f0lmuT9OHac", type: "teaser" },
       { label: "Teaser", url: "https://youtu.be/ujPBCFefs9g", type: "teaser" },
+      { label: "Trailer", url: "https://youtu.be/1WURJqP8GC0", type: "trailer" },
+
     ],
   },
 ];

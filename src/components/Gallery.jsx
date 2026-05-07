@@ -123,7 +123,7 @@ function GalleryItem({ g, i, scrollYProgress }) {
       <motion.div 
         variants={{
           initial: { opacity: 0 },
-          active: { opacity: 1 }
+          active: { opacity: 0.7 }
         }}
         className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" 
       />
